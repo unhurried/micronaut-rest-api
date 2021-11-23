@@ -1,3 +1,25 @@
 micronaut:
   application:
-    name: micronautRestApi
+    name: micronaut-rest-api
+  server:
+    context-path: /api
+datasources:
+  # Use H2 database for test purpose.
+  default:
+    url: jdbc:h2:mem:devDb
+    driverClassName: org.h2.Driver
+    username: dummy
+    password: dummy
+    schema-generate: CREATE_DROP
+    dialect: H2
+jpa:
+  default:
+    entity-scan:
+      packages: 'io.github.unhurried.micronautrestapi'
+    properties:
+      hibernate:
+        hbm2ddl:
+          # For development only, generate table automatically.
+          auto: update
+        # For development only, log issued SQL.
+        show_sql: true

@@ -1,14 +1,15 @@
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.5.21"
     id("org.jetbrains.kotlin.kapt") version "1.5.21"
-    id("com.github.johnrengelman.shadow") version "7.0.0"
-    id("io.micronaut.application") version "2.0.3"
+    id("com.github.johnrengelman.shadow") version "7.1.0"
+    id("io.micronaut.application") version "2.0.8"
     id("org.jetbrains.kotlin.plugin.allopen") version "1.5.21"
 }
 
 version = "0.1"
-group = "io.github.unhurried"
+group = "io.github.unhurried.micronautrestapi"
 
+val kotlinVersion=project.properties.get("kotlinVersion")
 repositories {
     mavenCentral()
 }
@@ -34,27 +35,37 @@ dependencies {
 
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
 
-}
+    // Micronaut Data
+    runtimeOnly("com.h2database:h2")
+    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
+    kapt("io.micronaut.data:micronaut-data-processor")
+    implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
 
+    // Micronaut JAX-RS
+    annotationProcessor("io.micronaut.jaxrs:micronaut-jaxrs-processor")
+    implementation("io.micronaut.jaxrs:micronaut-jaxrs-server")
+
+    // Bean Introspection
+    kapt("io.micronaut:micronaut-inject-java")
+    runtimeOnly("io.micronaut:micronaut-core")
+}
 
 application {
-    mainClass.set("io.github.unhurried.ApplicationKt")
+    mainClass.set("io.github.unhurried.micronautrestapi.ApplicationKt")
 }
 java {
-    sourceCompatibility = JavaVersion.toVersion("1.8")
+    sourceCompatibility = JavaVersion.toVersion("11")
 }
 
 tasks {
     compileKotlin {
         kotlinOptions {
-            jvmTarget = "1.8"
+            jvmTarget = "11"
         }
     }
     compileTestKotlin {
         kotlinOptions {
-            jvmTarget = "1.8"
+            jvmTarget = "11"
         }
     }
-
-
 }
